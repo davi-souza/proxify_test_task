@@ -1,0 +1,27 @@
+version: '3'
+services:
+    proxify:
+        image: node:12.18.4-stretch-slim
+        container_name: proxify
+        working_dir: /proxify
+        command: yarn start
+        volumes:
+            - ./:/proxify/:consistent
+    database:
+        image: postgres:12-alpine
+        container_name: database
+        environment:
+            POSTGRES_HOST: database
+            POSTGRES_PORT: 5432
+            POSTGRES_DB: proxify
+            POSTGRES_USER: proxify
+            POSTGRES_PASSWORD: 123
+        volumes:
+            - db_volume:/var/lib/postgresql/data:consistent
+networks:
+    default:
+        external:
+            name: ds_network
+volumes:
+    db_volume:
+        external: true
